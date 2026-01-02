@@ -148,7 +148,7 @@ Tento projekt je vyvíjen jako open-source nástroj pro osobní i komerční pou
 
 ## 👨‍💻 Autor
 
-**Parťák v programování** - verze 1.1
+**Ypsilonx** - verze 1.1
 
 ---
 
