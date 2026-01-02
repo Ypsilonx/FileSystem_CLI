@@ -1,0 +1,10 @@
+[package]
+name = "FileSystem_CLI"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# Pro zpracování argumentů v příkazové řádce
+clap = { version = "4.4", features = ["derive"] }
+# Pro krásné formátování času
+chrono = "0.4"
