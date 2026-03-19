@@ -8,3 +8,5 @@ edition = "2024"
 clap = { version = "4.4", features = ["derive"] }
 # Pro krásné formátování času
 chrono = "0.4"
+# Progress bar / spinner
+indicatif = "0.17"

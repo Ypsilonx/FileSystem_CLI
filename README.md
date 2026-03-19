@@ -9,7 +9,7 @@ FileSystem CLI je rychlý a efektivní nástroj pro skenování adresářů, ana
 ## ✨ Funkce
 
 ### Aktuálně dostupné:
-- 🔍 **Skenování adresářů** - Rychlé procházení souborového systému
+- 🔍 **Skenování adresářů** - Rychlé procházení souborového systému s progress spinnerem
 - 📊 **Řazení souborů** podle:
   - Názvu (`name`)
   - Velikosti (`size`)
@@ -18,7 +18,8 @@ FileSystem CLI je rychlý a efektivní nástroj pro skenování adresářů, ana
 - ⬆️⬇️ **Směr řazení** - Vzestupně (`asc`) nebo sestupně (`desc`)
 - 📈 **Statistický sumář** - Přehled typů souborů, jejich počtu a celkové velikosti
 - 📁 **Rekurzivní měření** - Automatický výpočet velikosti složek včetně jejich obsahu
-- 🎨 **Přehledný výstup** - Tabulkový formát s ikonami a jednotkami (KB/MB)
+- 🎨 **Přehledný výstup** - Tabulkový formát s ikonami a jednotkami (B/KB/MB/GB)
+- 🛡️ **Bezpečný chod** - Nedostupné soubory jsou přeskočeny s varováním, program nekrachuje
 
 ### 🚧 V plánu:
 - 📂 Automatické třídění souborů do složek podle parametrů (přípona, velikost, datum)
@@ -58,6 +59,8 @@ FileSystem_CLI [CESTA] [PARAMETRY]
 | `path` | - | Cesta k adresáři, který chcete skenovat | `.` (aktuální adresář) |
 | `--order-by` | `-o` | Způsob řazení: `name`, `size`, `date`, `ext` | `name` |
 | `--direction` | `-d` | Směr řazení: `asc` (vzestupně), `desc` (sestupně) | `asc` |
+
+> **Tip:** Při zadání neplatné hodnoty (např. `--order-by blabla`) zobrazí clap chybu s přehledem platných možností.
 
 ### 💡 Příklady použití
 
@@ -102,10 +105,12 @@ Typ   Přípona         | Název                          | Velikost     | Vytvo
 📄    md              | README.md                      | 3.12 KB      | 02.01.2026 10:15
 
 📊 --- SUMÁŘ PODLE PŘÍTOMNÝCH TYPŮ ---
-Složka         :   2 položek, celkem      46.68 MB
-toml           :   1 položek, celkem       0.00 MB
-md             :   1 položek, celkem       0.00 MB
+md             :   1 položek, celkem      3.12 KB
+Složka         :   2 položek, celkem     46.68 MB
+toml           :   1 položek, celkem    256.00 B
 ```
+
+> Sumář je seřazen abecedně podle typu souboru.
 
 ## 🛠️ Technické detaily
 
@@ -113,6 +118,7 @@ md             :   1 položek, celkem       0.00 MB
 - **Závislosti**:
   - `clap 4.4` - Parsování argumentů příkazové řádky
   - `chrono 0.4` - Práce s datem a časem
+  - `indicatif 0.17` - Progress bar / spinner
 
 ### Struktura projektu
 
@@ -131,9 +137,13 @@ FileSystem_CLI/
 Aplikace rekurzivně prochází všechny podsložky a soubory pro přesný výpočet celkové velikosti složky.
 
 ### Formátování velikostí
-- Soubory menší než 1 MB se zobrazují v **KB** (kilobytech)
-- Soubory větší než 1 MB se zobrazují v **MB** (megabytech)
-- Sumář vždy zobrazuje velikosti v MB pro konzistenci
+Aplikace automaticky volí nejvhodnější jednotku:
+- `< 1 024 B` → zobrazuje v **B** (bajtech)
+- `< 1 MB` → zobrazuje v **KB** (kilobytech)
+- `< 1 GB` → zobrazuje v **MB** (megabytech)
+- `≥ 1 GB` → zobrazuje v **GB** (gigabytech)
+
+Sumář používá stejnou logiku — hodnoty jsou vždy ve čitelných jednotkách.
 
 ### Soubory bez přípony
 Soubory bez přípony jsou označeny jako `"Bez přípony"` ve výpisu a statistikách.
